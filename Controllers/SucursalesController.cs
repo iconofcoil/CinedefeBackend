@@ -29,8 +29,8 @@ namespace CinedefeBackend.Controllers
         }
 
         // GET: api/Sucursales/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Sucursal>> GetSucursales(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<Sucursal>> GetSucursales([FromRoute]int id)
         {
             var sucursales = await _context.Sucursales.FindAsync(id);
 
@@ -42,9 +42,23 @@ namespace CinedefeBackend.Controllers
             return sucursales;
         }
 
+        // GET: api/Sucursales/ciudad
+        [HttpGet("{ciudad}")]
+        public async Task<ActionResult<IEnumerable<Sucursal>>> GetSucursalesByCiudad([FromRoute]string ciudad)
+        {
+            var sucursales = await _context.Sucursales.Where(x => x.Ciudad == ciudad).ToListAsync();
+
+            if (sucursales == null)
+            {
+                return NotFound();
+            }
+
+            return sucursales;
+        }
+
         // PUT: api/Sucursales/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutSucursales(int id, Sucursal sucursales)
+        public async Task<IActionResult> PutSucursales([FromHeader]int id, [FromBody]Sucursal sucursales)
         {
             if (id != sucursales.Id)
             {
@@ -74,7 +88,7 @@ namespace CinedefeBackend.Controllers
 
         // POST: api/Sucursales
         [HttpPost]
-        public async Task<ActionResult<Sucursal>> PostSucursales(Sucursal sucursales)
+        public async Task<ActionResult<Sucursal>> PostSucursales([FromBody]Sucursal sucursales)
         {
             _context.Sucursales.Add(sucursales);
             await _context.SaveChangesAsync();
