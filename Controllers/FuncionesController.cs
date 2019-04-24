@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+
 using CinedefeBackend.Models;
 
 namespace CinedefeBackend.Controllers
@@ -29,7 +30,7 @@ namespace CinedefeBackend.Controllers
         }
 
         // GET: api/Funciones/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<Funcion>> GetFunciones([FromRoute]int id)
         {
             var funciones = await _context.Funciones.FindAsync(id);
@@ -43,7 +44,7 @@ namespace CinedefeBackend.Controllers
         }
 
         // GET: api/Funciones/5/extended
-        [HttpGet("{id}/extended")]
+        [HttpGet("{id:int}/extended")]
         public async Task<ActionResult<FuncionExtended>> GetFuncionesExtended([FromRoute]int id)
         {
             // Retrieves Funcion
@@ -73,6 +74,20 @@ namespace CinedefeBackend.Controllers
             }
 
             return Ok(funcionExtended);
+        }
+
+        // GET: api/funciones/sucursal/id
+        [HttpGet("Sucursal/{id:int}")]
+        public async Task<ActionResult<FuncionDisponibleView>> GetFuncionesDisponiblesBySucursal([FromRoute]int id)
+        {
+            var funciones = await _context.vwFuncionesDisponibles.Where(x => x.SucursalId == id).ToListAsync();
+            
+            if (funciones == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(funciones);
         }
 
         // PUT: api/Funciones/5

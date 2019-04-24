@@ -31,7 +31,8 @@ namespace CinedefeBackend.Models
         public virtual DbSet<Usuario> Usuarios { get; set; }
         public virtual DbSet<UsuarioRol> UsuariosRoles { get; set; }
 
-        public virtual   DbQuery<UsuariosRolesView> vwUsuariosRoles { get; set; }
+        public virtual DbQuery<UsuariosRolesView> vwUsuariosRoles { get; set; }
+        public virtual DbQuery<FuncionDisponibleView> vwFuncionesDisponibles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
