@@ -8,7 +8,6 @@ namespace CinedefeBackend.Models
         public int Id { get; set; }
         public int SalaId { get; set; }
         public int PeliculaId { get; set; }
-        public string Horario { get; set; }
         public byte Activa { get; set; }
     }
 
@@ -17,7 +16,6 @@ namespace CinedefeBackend.Models
         public int Id { get; set; }
         public Sala Sala { get; set; }
         public Pelicula Pelicula { get; set; }
-        public string Horario { get; set; }
         public byte Activa { get; set; }
 
         public FuncionExtended()
@@ -34,7 +32,6 @@ namespace CinedefeBackend.Models
             this.Id = funcion.Id;
             this.Sala.Id = funcion.SalaId;
             this.Pelicula.Id = funcion.PeliculaId;
-            this.Horario = funcion.Horario;
             this.Activa = funcion.Activa;
         }
     }

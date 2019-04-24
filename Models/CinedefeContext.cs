@@ -17,8 +17,10 @@ namespace CinedefeBackend.Models
 
         public virtual DbSet<Boleto> Boletos { get; set; }
         public virtual DbSet<BoletoTipo> BoletosTipos { get; set; }
+        public virtual DbSet<BoletoTipoFuncion> BoletoTipoFuncion { get; set; }
         public virtual DbSet<Cliente> Clientes { get; set; }
         public virtual DbSet<Funcion> Funciones { get; set; }
+        public virtual DbSet<FuncionHorario> FuncionHorarios { get; set; }
         public virtual DbSet<FuncionAsientosReservados> FuncionesAsientosReservados { get; set; }
         public virtual DbSet<Pelicula> Peliculas { get; set; }
         public virtual DbSet<PeliculaClasificacion> PeliculasClasificaciones { get; set; }
@@ -35,7 +37,7 @@ namespace CinedefeBackend.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                //#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
                 optionsBuilder.UseMySQL("server=localhost;port=3306;user=root;password=TodosPara.1;database=cinedefe");
             }
         }
@@ -68,6 +70,8 @@ namespace CinedefeBackend.Models
                 entity.Property(e => e.Precio).HasColumnType("decimal(11,2)");
 
                 entity.Property(e => e.TipoId).HasColumnType("int(11)");
+
+                entity.Property(e => e.Horario).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<BoletoTipo>(entity =>
@@ -86,6 +90,19 @@ namespace CinedefeBackend.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PrecioActual).HasColumnType("decimal(11,2)");
+            });
+
+            modelBuilder.Entity<BoletoTipoFuncion>(entity =>
+            {
+                entity.HasKey(e => new { e.BoletoTipoId, e.FuncionId });
+
+                entity.ToTable("boletostiposfunciones", "cinedefe");
+
+                entity.Property(e => e.BoletoTipoId).HasColumnType("int(11)");
+
+                entity.Property(e => e.FuncionId).HasColumnType("int(11)");
+
+                entity.Property(e => e.Precio).HasColumnType("decimal(11,2)");
             });
 
             modelBuilder.Entity<Cliente>(entity =>
@@ -119,10 +136,15 @@ namespace CinedefeBackend.Models
                     .HasName("Id_UNIQUE")
                     .IsUnique();
 
-                entity.Property(e => e.Horario)
-                    .IsRequired()
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
+                entity.HasIndex(e => e.PeliculaId)
+                    .HasName("PeliculaId");
+
+                entity.HasIndex(e => e.SalaId)
+                    .HasName("SalaId");
+
+                entity.HasIndex(e => new { e.SalaId, e.PeliculaId })
+                    .HasName("SalaPelicula")
+                    .IsUnique();
 
                 entity.Property(e => e.Id).HasColumnType("int(11)");
 
@@ -131,6 +153,17 @@ namespace CinedefeBackend.Models
                 entity.Property(e => e.PeliculaId).HasColumnType("int(11)");
 
                 entity.Property(e => e.SalaId).HasColumnType("int(11)");
+            });
+
+            modelBuilder.Entity<FuncionHorario>(entity =>
+            {
+                entity.HasKey(e => new { e.FuncionId, e.Horario });
+
+                entity.ToTable("funcioneshorarios", "cinedefe");
+
+                entity.Property(e => e.FuncionId).HasColumnType("int(11)");
+
+                entity.Property(e => e.Horario).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<FuncionAsientosReservados>(entity =>

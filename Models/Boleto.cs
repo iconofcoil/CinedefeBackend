@@ -12,6 +12,8 @@ namespace CinedefeBackend.Models
         public decimal Precio { get; set; }
         public string AsientoFila { get; set; }
         public short AsientoNumero { get; set; }
+        public DateTime Horario { get; set; }
+
     }
 
     public partial class BoletoExtended
@@ -23,12 +25,20 @@ namespace CinedefeBackend.Models
         public decimal Precio { get; set; }
         public string AsientoFila { get; set; }
         public short AsientoNumero { get; set; }
+        public DateTime Horario { get; set; }
 
-        public BoletoExtended()
+
+        public BoletoExtended(Boleto boleto)
         {
             Tipo = new BoletoTipo();
             Funcion = new Funcion();
             Cliente = new Cliente();
+
+            this.Id = boleto.Id;
+            this.Precio = boleto.Precio;
+            this.AsientoFila = boleto.AsientoFila;
+            this.AsientoNumero = boleto.AsientoNumero;
+            this.Horario = boleto.Horario;
         }
     }
 }
