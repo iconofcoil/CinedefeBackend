@@ -17,6 +17,5 @@ namespace CinedefeBackend.Models
         public string SalaNombre { get; set; }
         public string SalaTipo { get; set; }
         public int SucursalId { get; set; }
-
     }
 }
