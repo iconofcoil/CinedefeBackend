@@ -43,6 +43,20 @@ namespace CinedefeBackend.Controllers
             return funciones;
         }
 
+        // GET: api/Funciones/5/horarios
+        [HttpGet("{id:int}/horarios")]
+        public async Task<ActionResult<List<FuncionHorario>>> GetHorariosFuncion([FromRoute]int id)
+        {
+            var horarios = await _context.FuncionHorarios.Where(x => x.FuncionId == id).ToListAsync();
+
+            if (horarios == null)
+            {
+                return NotFound();
+            }
+
+            return horarios;
+        }
+
         // GET: api/Funciones/5/extended
         [HttpGet("{id:int}/extended")]
         public async Task<ActionResult<FuncionExtended>> GetFuncionesExtended([FromRoute]int id)
@@ -77,7 +91,7 @@ namespace CinedefeBackend.Controllers
         }
 
         // GET: api/funciones/sucursal/id
-        [HttpGet("Sucursal/{id:int}")]
+        [HttpGet("sucursal/{id:int}")]
         public async Task<ActionResult<FuncionDisponibleView>> GetFuncionesDisponiblesBySucursal([FromRoute]int id)
         {
             var funciones = await _context.vwFuncionesDisponibles.Where(x => x.SucursalId == id).ToListAsync();
