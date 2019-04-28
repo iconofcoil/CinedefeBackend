@@ -57,6 +57,31 @@ namespace CinedefeBackend.Controllers
             return horarios;
         }
 
+        // GET: api/Funciones/5/horarios/fechas
+        [HttpGet("{id:int}/horarios/fechas")]
+        public async Task<ActionResult<List<FuncionHorario>>> GetFechasFuncion([FromRoute]int id)
+        {
+            List<FuncionHorario> funcionFechas = new List<FuncionHorario>();
+
+            var horarios = await _context.FuncionHorarios.Where(x => x.FuncionId == id).ToListAsync();
+
+            if (horarios == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                var fechas = horarios.Select(x => x.Horario.Date).Distinct();
+
+                foreach (DateTime d in fechas)
+                {
+                    funcionFechas.Add(new FuncionHorario { FuncionId = id, Horario = d });
+                }
+            }
+
+            return funcionFechas;
+        }
+
         // GET: api/Funciones/5/extended
         [HttpGet("{id:int}/extended")]
         public async Task<ActionResult<FuncionExtended>> GetFuncionesExtended([FromRoute]int id)

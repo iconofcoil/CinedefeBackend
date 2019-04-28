@@ -29,10 +29,25 @@ namespace CinedefeBackend.Controllers
         }
 
         // GET: api/FuncionHorarios/5
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<FuncionHorario>> GetFuncionHorario(int id)
         {
             var funcionHorario = await _context.FuncionHorarios.FindAsync(id);
+
+            if (funcionHorario == null)
+            {
+                return NotFound();
+            }
+
+            return funcionHorario;
+        }
+
+        // GET: api/FuncionHorarios/5/fecha
+        [HttpGet("{id:int}/fecha/{fecha}")]
+        public async Task<ActionResult<List<FuncionHorario>>> GetFuncionHorario(int id, string fecha)
+        {
+            DateTime fechaDate = DateTime.Parse(fecha);
+            var funcionHorario = await _context.FuncionHorarios.Where(x => x.FuncionId == id && x.Horario.Date == fechaDate).ToListAsync();
 
             if (funcionHorario == null)
             {
